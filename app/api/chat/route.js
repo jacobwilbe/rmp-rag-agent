@@ -13,7 +13,7 @@ export async function POST(req) {
     const pc = new Pinecone({
         apiKey: process.env.PINECONE_API_KEY
     })
-    const index = pc.Index('rag').namespace('ns1')
+    const index = pc.Index('rag').namespace('UDCS2')
     const openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY
     })
@@ -24,7 +24,7 @@ export async function POST(req) {
         encoding_format: 'float'
     })
     const results = await index.query({
-        topK: 3,
+        topK: 26,
         includeMetadata: true,
         vector: embedding.data[0].embedding
     })
@@ -33,9 +33,11 @@ export async function POST(req) {
         resultString += `
         Returned Results:
         Professor: ${match.id}
-        Review: ${match.metadata.review}
-        Subject: ${match.metadata.subject}
-        Stars: ${match.metadata.stars}
+        Review: ${match.metadata.reviews}
+        Average Grade: ${match.metadata.average_grade}
+        Rating: ${match.metadata.rating}
+        Difficulty: ${match.metadata.difficulty}
+        Courses: ${match.metadata.courses}
         \n\n
         `
     })
